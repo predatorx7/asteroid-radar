@@ -1,6 +1,8 @@
 package com.udacity.asteroidradar.work
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.udacity.asteroidradar.database.getDatabase
@@ -12,6 +14,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters): Coroutin
         const val WORK_NAME = "RefreshAstroidWorker"
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
         val database = getDatabase(applicationContext)
         val repository = AsteroidRepository(database)

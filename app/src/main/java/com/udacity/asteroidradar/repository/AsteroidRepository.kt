@@ -5,13 +5,13 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.api.AsteroidApiService
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.asDatabaseModel
 import com.udacity.asteroidradar.database.asDomainModel
-import com.udacity.asteroidradar.Constants.API_KEY
+import com.udacity.asteroidradar.database.Constants.API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -40,7 +40,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     @RequiresApi(Build.VERSION_CODES.O)
     val weekAsteroids: LiveData<List<Asteroid>> =
         Transformations.map(
-            database.asteroidDao.getAsteroidsDate(
+            database.asteroidDao.getAsteroidsBetweenDates(
                 startDate.format(DateTimeFormatter.ISO_DATE),
                 endDate.format(DateTimeFormatter.ISO_DATE)
             )

@@ -2,47 +2,47 @@ package com.udacity.asteroidradar.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.data.Asteroid
 
 @Entity(tableName = "asteroids")
 data class DatabaseAsteroid constructor(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val codename: String,
     val closeApproachDate: String,
-    val absoluteMagnitude: Double,
     val estimatedDiameter: Double,
     val relativeVelocity: Double,
     val distanceFromEarth: Double,
-    val isPotentiallyHazardous: Boolean
+    val isPotentiallyHazardous: Boolean,
+    val codename: String,
+    val absoluteMagnitude: Double,
 )
-
-fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid> {
-    return map {
-        Asteroid(
-            id = it.id,
-            codename = it.codename,
-            closeApproachDate = it.closeApproachDate,
-            absoluteMagnitude = it.absoluteMagnitude,
-            estimatedDiameter = it.estimatedDiameter,
-            relativeVelocity = it.relativeVelocity,
-            distanceFromEarth = it.distanceFromEarth,
-            isPotentiallyHazardous = it.isPotentiallyHazardous
-        )
-    }
-}
 
 fun List<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroid> {
     return map {
         DatabaseAsteroid(
             id = it.id,
-            codename = it.codename,
             closeApproachDate = it.closeApproachDate,
-            absoluteMagnitude = it.absoluteMagnitude,
             estimatedDiameter = it.estimatedDiameter,
-            relativeVelocity = it.relativeVelocity,
+            codename = it.codename,
             distanceFromEarth = it.distanceFromEarth,
+            absoluteMagnitude = it.absoluteMagnitude,
+            relativeVelocity = it.relativeVelocity,
             isPotentiallyHazardous = it.isPotentiallyHazardous
         )
     }.toTypedArray()
+}
+
+fun List<DatabaseAsteroid>.asDomainModel(): List<Asteroid> {
+    return map {
+        Asteroid(
+            id = it.id,
+            absoluteMagnitude = it.absoluteMagnitude,
+            codename = it.codename,
+            distanceFromEarth = it.distanceFromEarth,
+            estimatedDiameter = it.estimatedDiameter,
+            relativeVelocity = it.relativeVelocity,
+            closeApproachDate = it.closeApproachDate,
+            isPotentiallyHazardous = it.isPotentiallyHazardous
+        )
+    }
 }

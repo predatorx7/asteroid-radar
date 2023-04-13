@@ -6,12 +6,10 @@ import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
-import com.udacity.asteroidradar.AsteroidFilter
+import com.udacity.asteroidradar.data.AsteroidFilter
 
 class MainFragment : Fragment() {
 
@@ -22,6 +20,23 @@ class MainFragment : Fragment() {
     private val asteroidAdapter = MainAdapter(MainAdapter.AsteroidListener { asteroid ->
         viewModel.onAsteroidClicked(asteroid)
     })
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.onUpdateFilter(
+            when (item.itemId) {
+                R.id.show_rent_menu -> {
+                    AsteroidFilter.TODAY
+                }
+                R.id.show_all_menu -> {
+                    AsteroidFilter.WEEK
+                }
+                else -> {
+                    AsteroidFilter.ALL
+                }
+            }
+        )
+        return true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +60,11 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_overflow_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,25 +73,4 @@ class MainFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_overflow_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.onUpdateFilter(
-            when (item.itemId) {
-                R.id.show_rent_menu -> {
-                    AsteroidFilter.TODAY
-                }
-                R.id.show_all_menu -> {
-                    AsteroidFilter.WEEK
-                }
-                else -> {
-                    AsteroidFilter.ALL
-                }
-            }
-        )
-        return true
-    }
 }

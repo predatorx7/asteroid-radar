@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.databinding.AsteroidItemBinding
 
 class MainAdapter(private val clickListener: AsteroidListener) :
@@ -22,23 +22,17 @@ class MainAdapter(private val clickListener: AsteroidListener) :
 
     }
 
+    class AsteroidListener(val clickListener: (asteroid: Asteroid) -> Unit) {
+        fun onClick(asteroid: Asteroid) = clickListener(asteroid)
+    }
+
+
     class AsteroidViewHolder(var binding: AsteroidItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(asteroid: Asteroid) {
             binding.asteroid = asteroid
             binding.executePendingBindings()
         }
     }
-
-    class AsteroidListener(val clickListener: (asteroid: Asteroid) -> Unit) {
-        fun onClick(asteroid: Asteroid) = clickListener(asteroid)
-    }
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
-        val withDataBinding: AsteroidItemBinding = AsteroidItemBinding.inflate(LayoutInflater.from(parent.context))
-        return AsteroidViewHolder(withDataBinding)
-    }
-
 
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
         val asteroid = getItem(position)
@@ -50,4 +44,12 @@ class MainAdapter(private val clickListener: AsteroidListener) :
             it.bind(asteroid)
         }
     }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
+        val withDataBinding: AsteroidItemBinding = AsteroidItemBinding.inflate(LayoutInflater.from(parent.context))
+        return AsteroidViewHolder(withDataBinding)
+    }
+
+
 }
